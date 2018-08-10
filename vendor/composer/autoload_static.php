@@ -19,6 +19,7 @@ class ComposerStaticInitaa12501f18f96cc4a93f6e149a856f31
         'y' => 
         array (
             'yii\\swiftmailer\\' => 16,
+            'yii\\imagine\\' => 12,
             'yii\\gii\\' => 8,
             'yii\\faker\\' => 10,
             'yii\\debug\\' => 10,
@@ -29,6 +30,11 @@ class ComposerStaticInitaa12501f18f96cc4a93f6e149a856f31
         'p' => 
         array (
             'phpDocumentor\\Reflection\\' => 25,
+        ),
+        'd' => 
+        array (
+            'dosamigos\\gallery\\' => 18,
+            'dosamigos\\fileupload\\' => 21,
         ),
         'c' => 
         array (
@@ -81,6 +87,10 @@ class ComposerStaticInitaa12501f18f96cc4a93f6e149a856f31
         array (
             0 => __DIR__ . '/..' . '/yiisoft/yii2-swiftmailer',
         ),
+        'yii\\imagine\\' => 
+        array (
+            0 => __DIR__ . '/..' . '/yiisoft/yii2-imagine/src',
+        ),
         'yii\\gii\\' => 
         array (
             0 => __DIR__ . '/..' . '/yiisoft/yii2-gii/src',
@@ -110,6 +120,14 @@ class ComposerStaticInitaa12501f18f96cc4a93f6e149a856f31
             0 => __DIR__ . '/..' . '/phpdocumentor/reflection-common/src',
             1 => __DIR__ . '/..' . '/phpdocumentor/reflection-docblock/src',
             2 => __DIR__ . '/..' . '/phpdocumentor/type-resolver/src',
+        ),
+        'dosamigos\\gallery\\' => 
+        array (
+            0 => __DIR__ . '/..' . '/2amigos/yii2-gallery-widget/src',
+        ),
+        'dosamigos\\fileupload\\' => 
+        array (
+            0 => __DIR__ . '/..' . '/2amigos/yii2-file-upload-widget/src',
         ),
         'cebe\\markdown\\' => 
         array (
@@ -200,6 +218,13 @@ class ComposerStaticInitaa12501f18f96cc4a93f6e149a856f31
             'Prophecy\\' => 
             array (
                 0 => __DIR__ . '/..' . '/phpspec/prophecy/src',
+            ),
+        ),
+        'I' => 
+        array (
+            'Imagine' => 
+            array (
+                0 => __DIR__ . '/..' . '/imagine/imagine/lib',
             ),
         ),
         'H' => 
