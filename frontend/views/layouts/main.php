@@ -9,9 +9,11 @@ use yii\bootstrap\NavBar;
 use yii\widgets\Breadcrumbs;
 use frontend\assets\AppAsset;
 use common\widgets\Alert;
-use yii\helpers\url;
+use frontend\assets\BowerAsset;
+use frontend\widgets\ModalNewPostWidget;
 
 AppAsset::register($this);
+BowerAsset::register($this);
 ?>
 <?php $this->beginPage() ?>
 <!DOCTYPE html>
@@ -26,7 +28,6 @@ AppAsset::register($this);
 </head>
 <body>
 <?php $this->beginBody() ?>
-
 <div class="wrap">
     <?php
     NavBar::begin([
@@ -39,6 +40,7 @@ AppAsset::register($this);
     $menuItems = [
         ['label' => 'Home', 'url' => ['/site/index']],
     ];
+
     if (Yii::$app->user->isGuest) {
         $menuItems[] = ['label' => 'Signup', 'url' => ['/user/default/signup']];
         $menuItems[] = ['label' => 'Login', 'url' => ['/user/default/login']];
@@ -57,6 +59,9 @@ AppAsset::register($this);
         'options' => ['class' => 'navbar-nav navbar-right'],
         'items' => $menuItems,
     ]);
+    if(!Yii::$app->user->isGuest){
+        echo ModalNewPostWidget::widget();
+    };
     NavBar::end();
     ?>
 

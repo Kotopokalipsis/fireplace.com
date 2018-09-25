@@ -86,6 +86,17 @@ class User extends ActiveRecord implements IdentityInterface
     }
 
     /**
+     * Finds user by user_id
+     *
+     * @param string $id
+     * @return static|null
+     */
+    public static function findById($id)
+    {
+        return static::findOne(['id' => $id]);
+    }
+
+    /**
      * Finds user by password reset token
      *
      * @param string $token password reset token

@@ -3,6 +3,7 @@
 namespace frontend\modules\user\controllers;
 
 use frontend\models\User;
+use frontend\models\Post;
 use frontend\modules\user\models\forms\ProfileImgForm;
 use Yii;
 use yii\web\Controller;
@@ -15,16 +16,24 @@ class ProfileController extends Controller
     public function actionView($nickname)
     {
         if((Yii::$app->user->identity->getId() != $nickname) and (Yii::$app->user->identity->getNickname() != $nickname)){
+
+            $user = $this->findUser($nickname);
+            $posts = Post::findPostsByUserId($user->id);
+
             return $this->render('index', [
-                'user' => $this->findUser($nickname),
+                'user' => $user,
+                'posts' => $posts,
             ]);
         }
         else{
             $modelProfileImg = new ProfileImgForm();
+            $user = Yii::$app->user->identity;
+            $posts = Post::findPostsByUserId($user->id);
 
             return $this->render('my', [
                 'modelProfileImg' => $modelProfileImg,
                 'user' => Yii::$app->user->identity,
+                'posts' => $posts,
             ]);
         }
     }
