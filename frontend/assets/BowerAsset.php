@@ -10,5 +10,6 @@ class BowerAsset extends AssetBundle
 
     public $css = [
         'animate.css/animate.min.css',
+        'components-font-awesome/css/fontawesome-all.min.css',
     ];
 }

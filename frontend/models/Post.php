@@ -54,6 +54,11 @@ class Post extends \yii\db\ActiveRecord
         ];
     }
 
+    public function getId()
+    {
+        return $this->id;
+    }
+
     public function findPostByPostId($postId)
     {
         return static::findOne(['id' => $postId]);
@@ -62,5 +67,37 @@ class Post extends \yii\db\ActiveRecord
     public function findPostsByUserId($userId)
     {
         return static::findAll(['user_id' => $userId]);
+    }
+
+    public function like(User $user)
+    {
+        /* @var $redis Connection */
+        $redis = Yii::$app->redis;
+        $redis->sadd("post:{$this->getId()}:likes", $user->getId());
+    }
+
+    public function unlike(User $user)
+    {
+        /* @var $redis Connection */
+        $redis = Yii::$app->redis;
+        $redis->srem("post:{$this->getId()}:likes", $user->getId());
+    }
+
+    public function isLiked($userId)
+    {
+        /* @var $redis Connection */
+        $redis = Yii::$app->redis;
+        if ($redis->sismember("post:{$this->getId()}:likes", $userId)){
+            return true;
+        };
+        return false;
+    }
+
+    public function countLikes()
+    {
+        /* @var $redis Connection */
+        $redis = Yii::$app->redis;
+        $count = $redis->scard("post:{$this->getId()}:likes");
+        return $count;
     }
 }

@@ -8,6 +8,8 @@ use yii\web\Response;
 use frontend\modules\post\models\forms\PostForm;
 use frontend\models\Post;
 use frontend\models\User;
+use yii\web\NotFoundHttpException;
+use yii\debug;
 
 /**
  * Default controller for the `post` module
@@ -17,20 +19,27 @@ class DefaultController extends Controller
     public $post;
 
     /**
-     * Renders the index view for the module
-     * @return string
+     * Renders single post view for the module
+     * @param string $id of post
+     * @throws NotFoundHttpException
+     * @return mixed
      */
     public function actionView($id)
     {
-        $post = Post::findPostByPostId($id);
-        $user = User::findById($post['user_id']);
-
-        return $this->render('index', [
-            'post' => $post,
-            'nickname' => $user->username,
-        ]);
+        $post = $this->findPost($id);
+        if($user = User::findOne($post['user_id'])){
+            return $this->render('single-post', [
+                'post' => $post,
+                'nickname' => $user->username,
+            ]);
+        };
+        throw new NotFoundHttpException();
     }
 
+    /**
+     * Create new post
+     * @return array|Response
+     */
     public function actionNewPost()
     {
         Yii::$app->response->format = Response::FORMAT_JSON;
@@ -48,6 +57,74 @@ class DefaultController extends Controller
         }
         return [
             'success' => $this->post,
+        ];
+    }
+
+    /**
+     * Find single post
+     * @param string $id of post
+     * @throws NotFoundHttpException
+     * @return mixed
+     */
+    public function findPost($id)
+    {
+        if($post = Post::findOne($id)){
+            return $post;
+        }
+        throw new NotFoundHttpException();
+    }
+
+    /**
+     * Put 'like' on the post
+     * @return array|Response
+     * @throws NotFoundHttpException
+     */
+    public function actionLike()
+    {
+        if (Yii::$app->user->isGuest){
+            return $this->redirect(['/user/default/login']);
+        }
+
+        Yii::$app->response->format = Response::FORMAT_JSON;
+
+        $id = Yii::$app->request->post('id');
+        $post = $this->findPost($id);
+
+        /* @var $currentUser User*/
+        $currentUser = Yii::$app->user->identity;
+
+        $post->like($currentUser);
+
+        return [
+            'success' => true,
+            'countLikes' => $post->countLikes(),
+        ];
+    }
+
+    /**
+     * Put unlike on the post
+     * @return array|Response
+     * @throws NotFoundHttpException
+     */
+    public function actionUnlike()
+    {
+        if (Yii::$app->user->isGuest){
+            return $this->redirect(['/user/default/login']);
+        }
+
+        Yii::$app->response->format = Response::FORMAT_JSON;
+
+        $id = Yii::$app->request->post('id');
+        $post = $this->findPost($id);
+
+        /* @var $currentUser User*/
+        $currentUser = Yii::$app->user->identity;
+
+        $post->unlike($currentUser);
+
+        return [
+            'success' => true,
+            'countLikes' => $post->countLikes(),
         ];
     }
 }

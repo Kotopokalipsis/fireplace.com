@@ -5,7 +5,7 @@ namespace frontend\assets;
 use yii\web\AssetBundle;
 
 /**
- * Main frontend application asset bundle.
+ * Required set assets for module post.
  */
 class PostAsset extends AssetBundle
 {
@@ -15,7 +15,10 @@ class PostAsset extends AssetBundle
         'css/postMin.css',
     ];
     public $js = [
+        'js/like.js'
     ];
     public $depends = [
+        'yii\web\YiiAsset',
+        'yii\bootstrap\BootstrapAsset',
     ];
 }

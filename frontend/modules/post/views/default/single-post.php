@@ -26,3 +26,10 @@
         </div>
     </div>
 </div>
+<div class="row">
+    <div class="col-md-12">
+        <div class="text-center">
+            <i class="fas fa-heart"></i>
+        </div>
+    </div>
+</div>

@@ -1,5 +1,7 @@
 <?php
-
+/**
+ * Widget for creating a new post
+ */
 use yii\bootstrap\ActiveForm;
 use yii\helpers\Html;
 use frontend\assets\AppAsset;

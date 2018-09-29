@@ -1,8 +1,13 @@
 <?php
 /* @var $this yii\web\View */
 /* @var $user frontend\models\User */
+/* @var $currentUser frontend\models\User */
+
 use yii\helpers\Html;
+use frontend\assets\PostAsset;
+
 $this->title = Html::encode($user->username);
+PostAsset::register($this);
 ?>
 <div class="row">
     <div class="col-md-12">
@@ -37,6 +42,22 @@ $this->title = Html::encode($user->username);
 <div class="row">
     <div class="col-md-12 text-center">
         <h5><?php echo $item['creation_time'] ?></h5>
+    </div>
+</div>
+<div class="row">
+    <div class="col-md-12 text-center">
+        <i class="fas fa-heart"></i>
+    </div>
+</div>
+<div class="row">
+    <div class="col-md-12 text-center">
+        <?php if($item->isLiked($currentUser->getId())): ?>
+            <button class="btn btn-success btn-unlike" data-id="<?php echo $item['id'];?>"><i class="fas fa-heart">&nbsp;</i><?php echo $item->countLikes();?></button>
+            <button style="display:none;" class="btn btn-danger btn-like" data-id="<?php echo $item['id'];?>"><i class="fas fa-heart">&nbsp;</i><?php echo $item->countLikes();?></button>
+        <?php else:?>
+            <button style="display:none;" class="btn btn-success btn-unlike" data-id="<?php echo $item['id'];?>"><i class="fas fa-heart">&nbsp;</i><?php echo $item->countLikes();?></button>
+            <button class="btn btn-danger btn-like" data-id="<?php echo $item['id'];?>"><i class="fas fa-heart">&nbsp;</i><?php echo $item->countLikes();?></button>
+        <?php endif;?>
     </div>
 </div>
 <hr>

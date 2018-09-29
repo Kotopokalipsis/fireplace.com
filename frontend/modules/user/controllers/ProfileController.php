@@ -13,26 +13,32 @@ use yii\web\UploadedFile;
 
 class ProfileController extends Controller
 {
+    /**
+     * @param $nickname
+     * @return string
+     * @throws NotFoundHttpException
+     */
     public function actionView($nickname)
     {
         if((Yii::$app->user->identity->getId() != $nickname) and (Yii::$app->user->identity->getNickname() != $nickname)){
 
             $user = $this->findUser($nickname);
-            $posts = Post::findPostsByUserId($user->id);
+            $posts = Post::findAll(['user_id' => $user->id]);
 
             return $this->render('index', [
                 'user' => $user,
                 'posts' => $posts,
+                'currentUser' => Yii::$app->user->identity,
             ]);
         }
         else{
             $modelProfileImg = new ProfileImgForm();
             $user = Yii::$app->user->identity;
-            $posts = Post::findPostsByUserId($user->id);
+            $posts = Post::findAll(['user_id' => $user->id]);
 
             return $this->render('my', [
                 'modelProfileImg' => $modelProfileImg,
-                'user' => Yii::$app->user->identity,
+                'currentUser' => Yii::$app->user->identity,
                 'posts' => $posts,
             ]);
         }

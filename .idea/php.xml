@@ -69,6 +69,8 @@
       <path value="$PROJECT_DIR$/vendor/imagine/imagine" />
       <path value="$PROJECT_DIR$/vendor/yiisoft/yii2-imagine" />
       <path value="$PROJECT_DIR$/vendor/bower-asset/animate.css" />
+      <path value="$PROJECT_DIR$/vendor/bower-asset/components-font-awesome" />
+      <path value="$PROJECT_DIR$/vendor/yiisoft/yii2-redis" />
     </include_path>
   </component>
   <component name="PhpProjectSharedConfiguration" php_language_level="5.4.0" />

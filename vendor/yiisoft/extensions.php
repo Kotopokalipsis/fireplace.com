@@ -75,4 +75,13 @@ return array (
       '@yii/imagine' => $vendorDir . '/yiisoft/yii2-imagine/src',
     ),
   ),
+  'yiisoft/yii2-redis' => 
+  array (
+    'name' => 'yiisoft/yii2-redis',
+    'version' => '2.0.9.0',
+    'alias' => 
+    array (
+      '@yii/redis' => $vendorDir . '/yiisoft/yii2-redis/src',
+    ),
+  ),
 );

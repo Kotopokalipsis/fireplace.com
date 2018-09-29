@@ -7,6 +7,10 @@ use Yii;
 use yii\base\Model;
 use frontend\models\Post;
 
+/**
+ * Form for the `post` module
+ */
+
 class PostForm extends Model
 {
     public $title;
@@ -14,7 +18,10 @@ class PostForm extends Model
 
     private $user_id;
 
-
+    /**
+     * Rules of validation
+     * @return array
+     */
     public function rules()
     {
         return [
@@ -24,6 +31,11 @@ class PostForm extends Model
         ];
     }
 
+    /**
+     * Creating, filling and save new post in db
+     * @param string $user_id
+     * @return bool
+     */
     public function saveNewPost($user_id)
     {
         $post = new Post();
