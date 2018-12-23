@@ -50,6 +50,7 @@ return [
             'rules' => [
                 'profile/<nickname:\w+>' => 'user/profile/view',
                 'post/<id:\d+>' => 'post/default/view',
+                'user/login' => 'user/default/login',
             ],
         ],
         'ImgService' => [

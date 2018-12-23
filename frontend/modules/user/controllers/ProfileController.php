@@ -2,9 +2,11 @@
 
 namespace frontend\modules\user\controllers;
 
+use frontend\models\Comments;
 use frontend\models\User;
 use frontend\models\Post;
 use frontend\modules\user\models\forms\ProfileImgForm;
+use frontend\modules\post\models\forms\CommentForm;
 use Yii;
 use yii\web\Controller;
 use yii\web\NotFoundHttpException;
@@ -20,28 +22,17 @@ class ProfileController extends Controller
      */
     public function actionView($nickname)
     {
-        if((Yii::$app->user->identity->getId() != $nickname) and (Yii::$app->user->identity->getNickname() != $nickname)){
+        $modelProfileImg = new ProfileImgForm();
+        $user = $this->findUser($nickname);
+        $modelComment = new CommentForm(Yii::$app->user->identity->getNickname());
 
-            $user = $this->findUser($nickname);
-            $posts = Post::findAll(['user_id' => $user->id]);
-
-            return $this->render('index', [
-                'user' => $user,
-                'posts' => $posts,
-                'currentUser' => Yii::$app->user->identity,
-            ]);
-        }
-        else{
-            $modelProfileImg = new ProfileImgForm();
-            $user = Yii::$app->user->identity;
-            $posts = Post::findAll(['user_id' => $user->id]);
-
-            return $this->render('my', [
-                'modelProfileImg' => $modelProfileImg,
-                'currentUser' => Yii::$app->user->identity,
-                'posts' => $posts,
-            ]);
-        }
+        return $this->render('index', [
+            'modelProfileImg' => $modelProfileImg,
+            'currentUser' => Yii::$app->user->identity,
+            'user' => $user,
+            'posts' => $user->posts,
+            'modelComment' => $modelComment,
+        ]);
     }
 
     public function actionUploadProfileImg()
@@ -69,11 +60,54 @@ class ProfileController extends Controller
         return ['success' => false, 'errors' => $modelProfileImg->getErrors()];
     }
 
+    public function actionSubscribe()
+    {
+        if(Yii::$app->user->isGuest){
+            return $this->redirect(['/user/default/login']);
+        };
+
+        Yii::$app->response->format = Response::FORMAT_JSON;
+
+        if($nickname = Yii::$app->request->post()){
+            $user = $this->findUser($nickname);
+            $user->Subscribe();
+            return [
+                'success' => true,
+            ];
+        }
+
+        return [
+            'success' => $nickname,
+        ];
+    }
+
+    public function actionUnsubscribe()
+    {
+        if(Yii::$app->user->isGuest){
+            return $this->redirect(['/user/default/login']);
+        };
+
+        Yii::$app->response->format = Response::FORMAT_JSON;
+
+        if($nickname = Yii::$app->request->post()){
+            $user = $this->findUser($nickname);
+            $user->Unsubscribe();
+            return [
+                'success' => true,
+            ];
+        }
+
+        return [
+            'success' => $nickname,
+        ];
+    }
+
+
     public function findUser($nickname)
     {
         if($user = User::find()->where(['username' => $nickname])->orWhere(['id' => $nickname])->one()){
             return $user;
         }
-        throw new NotFoundHttpException();
+        return false;
     }
 }

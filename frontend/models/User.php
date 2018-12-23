@@ -7,6 +7,7 @@ use yii\behaviors\TimestampBehavior;
 use yii\db\ActiveRecord;
 use yii\web\IdentityInterface;
 use yii\helpers\FileHelper;
+use frontend\models\Post;
 
 /**
  * User model
@@ -230,5 +231,36 @@ class User extends ActiveRecord implements IdentityInterface
             FileHelper::unlink("$directory");
             $this->profile_img = null;
         }
+    }
+
+    public function getPosts()
+    {
+        return $this->hasMany(Post::className(), ['user_id' => 'id']);
+    }
+
+    public function Subscribe()
+    {
+        /* @var $redis Connection */
+        $redis = Yii::$app->redis;
+        $currentUserID = Yii::$app->user->identity->getId();
+        $redis->sadd("user:{$currentUserID}:subscription", $this->getId());
+    }
+
+    public function isSubscriber($userId)
+    {
+        /* @var $redis Connection */
+        $redis = Yii::$app->redis;
+        if ($redis->sismember("user:{$this->getId()}:subscription", $userId)) {
+            return true;
+        }
+        return false;
+    }
+
+    public function Unsubscribe()
+    {
+        /* @var $redis Connection */
+        $redis = Yii::$app->redis;
+        $currentUserID = Yii::$app->user->identity->getId();
+        $redis->srem("user:{$currentUserID}:subscription", $this->getId());
     }
 }

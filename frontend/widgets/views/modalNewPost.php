@@ -16,7 +16,9 @@ BowerAsset::register($this);
 <div id="myModal" class="modal">
     <!-- Modal content -->
     <?php
-    $form = ActiveForm::begin([]);
+    $form = ActiveForm::begin([
+            'id' => 'postForm',
+    ]);
     ?>
     <div class="modal-content animated fadeInDown">
         <div class="modal-header">
@@ -35,7 +37,7 @@ BowerAsset::register($this);
 
 <?php
 $js = <<<JS
-     $('form').on('beforeSubmit', function(){
+     $('#postForm').on('beforeSubmit', function(){
 	 var data = $(this).serialize();
 	 $.ajax({
 	    url: '/post/default/new-post',

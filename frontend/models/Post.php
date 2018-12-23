@@ -4,8 +4,8 @@ namespace frontend\models;
 
 use Yii;
 use yii\db\ActiveRecord;
-use yii\db\Expression;
 use yii\behaviors\TimestampBehavior;
+use frontend\models\Comments;
 
 /**
  * This is the model class for table "post".
@@ -99,5 +99,10 @@ class Post extends \yii\db\ActiveRecord
         $redis = Yii::$app->redis;
         $count = $redis->scard("post:{$this->getId()}:likes");
         return $count;
+    }
+
+    public function getComments()
+    {
+        return $this->hasMany(Comments::classname(), ['post_id' => 'id']);
     }
 }

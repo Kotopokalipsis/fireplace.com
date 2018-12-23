@@ -1,5 +1,4 @@
 $('.btn-like').click(function(){
-    var button = $(this).attr('data-id');
     var params = {
         'id' : $(this).attr('data-id'),
     };
@@ -8,15 +7,14 @@ $('.btn-like').click(function(){
         data: params,
         type: 'POST',
         success: function(res){
-            $('.btn-like[data-id='+button+']').hide();
-            $('.btn-unlike[data-id='+button+']').show().html('<i class="fas fa-heart">&nbsp;</i>'+res['countLikes']);
+            $('.btn-like[data-id='+params['id']+']').hide();
+            $('.btn-unlike[data-id='+params['id']+']').show().html('<i class="fas fa-heart">&nbsp;</i>'+res['countLikes']);
         },
         error: function(res){
         }
     });
 });
 $('.btn-unlike').click(function(){
-    var button = $(this).attr('data-id');
     var params = {
         'id' : $(this).attr('data-id'),
     };
@@ -25,8 +23,8 @@ $('.btn-unlike').click(function(){
         data: params,
         type: 'POST',
         success: function(res){
-            $('.btn-like[data-id='+button+']').show().html('<i class="fas fa-heart">&nbsp;</i>'+res['countLikes']);
-            $('.btn-unlike[data-id='+button+']').hide();
+            $('.btn-like[data-id='+params['id']+']').show().html('<i class="fas fa-heart">&nbsp;</i>'+res['countLikes']);
+            $('.btn-unlike[data-id='+params['id']+']').hide();
         },
         error: function(res){
         }

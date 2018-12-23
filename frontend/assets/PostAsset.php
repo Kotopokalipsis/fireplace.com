@@ -15,7 +15,9 @@ class PostAsset extends AssetBundle
         'css/postMin.css',
     ];
     public $js = [
-        'js/like.js'
+        'js/comments.js',
+        'js/like.js',
+        'js/subscribe.js',
     ];
     public $depends = [
         'yii\web\YiiAsset',

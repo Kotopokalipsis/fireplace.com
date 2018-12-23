@@ -5,11 +5,12 @@ namespace frontend\modules\post\controllers;
 use Yii;
 use yii\web\Controller;
 use yii\web\Response;
+use frontend\modules\post\models\forms\CommentForm;
 use frontend\modules\post\models\forms\PostForm;
 use frontend\models\Post;
 use frontend\models\User;
 use yii\web\NotFoundHttpException;
-use yii\debug;
+
 
 /**
  * Default controller for the `post` module
@@ -27,10 +28,13 @@ class DefaultController extends Controller
     public function actionView($id)
     {
         $post = $this->findPost($id);
+        $modelComment = new CommentForm(Yii::$app->user->identity->getNickname());
         if($user = User::findOne($post['user_id'])){
             return $this->render('single-post', [
                 'post' => $post,
-                'nickname' => $user->username,
+                'user' => $user,
+                'currentUser' => Yii::$app->user->identity,
+                'modelComment' => $modelComment,
             ]);
         };
         throw new NotFoundHttpException();
