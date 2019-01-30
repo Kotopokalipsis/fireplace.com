@@ -18,6 +18,9 @@ return [
         'post' => [
             'class' => 'frontend\modules\post\Module',
         ],
+        'feed' => [
+            'class' => 'frontend\modules\feed\Module',
+        ],
     ],
     'components' => [
         'request' => [
@@ -48,13 +51,28 @@ return [
             'enablePrettyUrl' => true,
             'showScriptName' => false,
             'rules' => [
+                '/index' => '/site/index',
+                '/signup' => '/user/default/signup',
+                '/login' => '/user/default/login',
                 'profile/<nickname:\w+>' => 'user/profile/view',
                 'post/<id:\d+>' => 'post/default/view',
-                'user/login' => 'user/default/login',
+                'post/new' => 'post/default/new-post',
+                '/feed' => 'feed/default/view',
             ],
         ],
         'ImgService' => [
             'class' => 'frontend\components\ImgService'
+        ],
+        'assetManager' => [
+            'bundles' => [
+                'yii\bootstrap\BootstrapPluginAsset' => [
+                    'js'=>[]
+                ],
+                'yii\bootstrap\BootstrapAsset' => [
+                    'css' => [],
+                ],
+
+            ],
         ],
     ],
     'params' => $params,

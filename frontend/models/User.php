@@ -8,6 +8,7 @@ use yii\db\ActiveRecord;
 use yii\web\IdentityInterface;
 use yii\helpers\FileHelper;
 use frontend\models\Post;
+use frontend\models\Comments;
 
 /**
  * User model
@@ -21,6 +22,7 @@ use frontend\models\Post;
  * @property integer $status
  * @property integer $created_at
  * @property integer $updated_at
+ * @property string $profile_img
  * @property string $password write-only password
  */
 class User extends ActiveRecord implements IdentityInterface
@@ -244,6 +246,7 @@ class User extends ActiveRecord implements IdentityInterface
         $redis = Yii::$app->redis;
         $currentUserID = Yii::$app->user->identity->getId();
         $redis->sadd("user:{$currentUserID}:subscription", $this->getId());
+        $redis->sadd("user:{$this->getId()}:follower", $currentUserID);
     }
 
     public function isSubscriber($userId)
@@ -256,11 +259,52 @@ class User extends ActiveRecord implements IdentityInterface
         return false;
     }
 
+    public function getFollowers()
+    {
+        /* @var $redis Connection */
+        $redis = Yii::$app->redis;
+        $followers = $redis->smembers("user:{$this->getId()}:follower");
+        return User::findAll($followers);
+    }
+
+    public function getSubscriptions()
+    {
+        /* @var $redis Connection */
+        $redis = Yii::$app->redis;
+        $subscriptions = $redis->smembers("user:{$this->getId()}:subscription");
+        return User::findAll($subscriptions);
+    }
+
+
     public function Unsubscribe()
     {
         /* @var $redis Connection */
         $redis = Yii::$app->redis;
         $currentUserID = Yii::$app->user->identity->getId();
         $redis->srem("user:{$currentUserID}:subscription", $this->getId());
+        $redis->srem("user:{$this->getId()}:follower", $currentUserID);
     }
+
+    public function getComments()
+    {
+        return $this->hasMany(Comments::className(), ['nickname' => 'username']);
+    }
+
+    public function countFollowers()
+    {
+        /* @var $redis Connection */
+        $redis = Yii::$app->redis;
+        return $redis->scard("user:{$this->getId()}:follower");
+    }
+
+    public function countSubscriptions()
+    {
+        /* @var $redis Connection */
+        $redis = Yii::$app->redis;
+        return $redis->scard("user:{$this->getId()}:subscription");
+    }
+
+
+
+
 }

@@ -23,9 +23,8 @@ class ProfileController extends Controller
     public function actionView($nickname)
     {
         $modelProfileImg = new ProfileImgForm();
-        $user = $this->findUser($nickname);
         $modelComment = new CommentForm(Yii::$app->user->identity->getNickname());
-
+        $user = $this->findUser($nickname);
         return $this->render('index', [
             'modelProfileImg' => $modelProfileImg,
             'currentUser' => Yii::$app->user->identity,
@@ -105,9 +104,9 @@ class ProfileController extends Controller
 
     public function findUser($nickname)
     {
-        if($user = User::find()->where(['username' => $nickname])->orWhere(['id' => $nickname])->one()){
+        if($user = User::findOne(['username' => $nickname])){
             return $user;
         }
-        return false;
+        throw new NotFoundHttpException('User not found');
     }
 }

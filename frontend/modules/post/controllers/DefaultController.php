@@ -4,12 +4,13 @@ namespace frontend\modules\post\controllers;
 
 use Yii;
 use yii\web\Controller;
-use yii\web\Response;
 use frontend\modules\post\models\forms\CommentForm;
 use frontend\modules\post\models\forms\PostForm;
+use yii\web\Response;
 use frontend\models\Post;
 use frontend\models\User;
 use yii\web\NotFoundHttpException;
+use yii\helpers\Url;
 
 
 /**
@@ -17,7 +18,6 @@ use yii\web\NotFoundHttpException;
  */
 class DefaultController extends Controller
 {
-    public $post;
 
     /**
      * Renders single post view for the module
@@ -41,27 +41,24 @@ class DefaultController extends Controller
     }
 
     /**
-     * Create new post
-     * @return array|Response
+     * @return array|string
      */
+
     public function actionNewPost()
     {
-        Yii::$app->response->format = Response::FORMAT_JSON;
-
         $model = new PostForm();
-        $this->post = $model;
-
         if($model->load(Yii::$app->request->post())){
-            if($model->validate() && $model->saveNewPost(Yii::$app->user->identity->getId()))
-            {
+            if($model->validate() && $model->saveNewPost(Yii::$app->user->identity->getId())) {
+                Yii::$app->response->format = Response::FORMAT_JSON;
                 return [
-                    'success' => $this->post,
+                    'model' => $model,
+                    'success' => true,
                 ];
             };
         }
-        return [
-            'success' => $this->post,
-        ];
+        return $this->render('new-post', [
+            'model' => $model,
+        ]);
     }
 
     /**

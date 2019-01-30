@@ -33,9 +33,9 @@ class SiteController extends Controller
     public function actionIndex()
     {
         if (Yii::$app->user->isGuest){
-            Yii::$app->response->redirect("/user/login");
+            return Yii::$app->response->redirect("/login");
         }
-        return $this->render('index');
+        return Yii::$app->response->redirect("/feed");
     }
 
     /**

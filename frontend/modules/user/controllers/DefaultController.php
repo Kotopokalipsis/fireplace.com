@@ -155,4 +155,9 @@ class DefaultController extends Controller
             'model' => $model,
         ]);
     }
+
+    public function actionSettings()
+    {
+        return $this->render('settings');
+    }
 }

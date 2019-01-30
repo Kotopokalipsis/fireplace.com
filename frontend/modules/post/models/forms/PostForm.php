@@ -6,6 +6,7 @@ namespace frontend\modules\post\models\forms;
 use Yii;
 use yii\base\Model;
 use frontend\models\Post;
+use frontend\models\Feed;
 
 /**
  * Form for the `post` module
@@ -25,8 +26,8 @@ class PostForm extends Model
     public function rules()
     {
         return [
-            ['content', 'string', 'length' => [4, 24]],
-            ['title', 'string', 'length' => [3, 10]],
+            ['content', 'string', 'length' => [4, 4096]],
+            ['title', 'string', 'length' => [3, 255]],
             [['content'], 'required'],
         ];
     }
@@ -43,7 +44,7 @@ class PostForm extends Model
         $post->content = $this->content;
         $post->user_id = $user_id;
 
-        if ($post->save('false')){
+        if ($post->save('false') && Feed::addNewFeeds($post)){
             return true;
         };
         return false;

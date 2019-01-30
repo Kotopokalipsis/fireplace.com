@@ -6,6 +6,7 @@ use Yii;
 use yii\db\ActiveRecord;
 use yii\behaviors\TimestampBehavior;
 use frontend\models\Comments;
+use frontend\models\User;
 
 /**
  * This is the model class for table "post".
@@ -104,5 +105,10 @@ class Post extends \yii\db\ActiveRecord
     public function getComments()
     {
         return $this->hasMany(Comments::classname(), ['post_id' => 'id']);
+    }
+
+    public function getUser()
+    {
+        return $this->hasOne(User::classname(), ['id' => 'user_id']);
     }
 }

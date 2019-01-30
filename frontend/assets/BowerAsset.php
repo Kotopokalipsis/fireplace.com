@@ -12,4 +12,8 @@ class BowerAsset extends AssetBundle
         'animate.css/animate.min.css',
         'components-font-awesome/css/fontawesome-all.min.css',
     ];
+    public $js = [
+        'underscore/underscore.js',
+    ];
+    public $jsOptions = ['position' => \yii\web\View::POS_HEAD];
 }
