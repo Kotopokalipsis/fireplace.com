@@ -9,6 +9,7 @@ use yii\web\Controller;
 use yii\filters\VerbFilter;
 use yii\filters\AccessControl;
 use frontend\models\User;
+use frontend\modules\user\models\forms\ProfileImgForm;
 use frontend\modules\user\models\LoginForm;
 use frontend\modules\user\models\PasswordResetRequestForm;
 use frontend\modules\user\models\ResetPasswordForm;
@@ -158,6 +159,35 @@ class DefaultController extends Controller
 
     public function actionSettings()
     {
-        return $this->render('settings');
+        $model = new ProfileImgForm();
+        return $this->render('settings', [
+            'profileImgModel' => $model,
+            'currentUser' => Yii::$app->user->identity,
+        ]);
+    }
+
+    public function actionUploadProfileImg()
+    {
+        Yii::$app->response->format = Response::FORMAT_JSON;
+
+        $currentUser = Yii::$app->user->identity;
+
+        $modelProfileImg = new ProfileImgForm();
+        $modelProfileImg->profileImg = UploadedFile::getInstance($modelProfileImg, 'profileImg');
+
+        if ($modelProfileImg->validate()) {
+
+            if ($path = Yii::$app->ImgService->saveImg($modelProfileImg, 'resize')) {
+
+                $currentUser->deleteProfileImg();
+                $currentUser->updateProfileImg($path);
+
+                return [
+                    'success' => true,
+                    'ProfileImgUri' => $path,
+                ];
+            }
+        }
+        return ['success' => false, 'errors' => $modelProfileImg->getErrors()];
     }
 }

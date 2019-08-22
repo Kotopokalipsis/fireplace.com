@@ -48,7 +48,7 @@ PostAsset::register($this);
                         <i class="fas fa-cog">&nbsp;</i>
                     </button>
                     <div class="dropdown-menu" aria-labelledby="dropdownMenuButton">
-                        <a class="dropdown-item" href="#">Settings</a>
+                        <a class="dropdown-item" href="<?php echo Url::toRoute('/user/default/settings') ?>">Settings</a>
                     </div>
                 </div>
             </div>
@@ -136,7 +136,7 @@ PostAsset::register($this);
                         </button>
                         <div class="dropdown-menu" aria-labelledby="dropdownMenuButton">
                             <?php if($currentUser->getId() == $user->getId()):?>
-                            <a class="dropdown-item" href="#">Delete post</a>
+                            <a class="dropdown-item delete-post" href="#" post-id="<?php echo Html::encode($item->id); ?>">Delete post</a>
                             <?php else: ?>
                             <a class="dropdown-item" href="#">Report post</a>
                             <?php endif; ?>
@@ -191,7 +191,7 @@ PostAsset::register($this);
     </div>
     </script>
 
-    <div class="mx-auto col-md-6 mb-sm-2 border row-input-comment px-0">
+    <div class="mx-auto col-md-6 mb-sm-2 border row-input-comment px-0" post-id="<?php echo Html::encode($item->id); ?>">
         <?php $form = ActiveForm::begin(['options' => ['class' => 'add-comment p-sm-2 my-auto row', 'post-id' => $item->id]]);?>
         <?php
         echo $form->field($modelComment, 'content', ['options'=>['class'=>'col-md-8'], 'template' => "{input}"])->textInput(['placeholder'=>'Enter your comment here', 'class'=>'form-control']); ?>
@@ -208,3 +208,26 @@ PostAsset::register($this);
     </div>
 </div>
 <?php endforeach; ?>
+
+<?php
+$js = <<<JS
+    $('.main').on('click', '.delete-post', function(){
+        var post_id = {
+            'id' : $(this).attr('post-id'),
+        };
+        $.ajax({
+            url:'/post/default/delete-post',
+            type: 'POST',
+            data: post_id,
+            success: function(res) {
+                $('.row-content[post-id='+post_id['id']+']').hide();
+                $('.row-comment[post-id='+post_id['id']+']').hide();
+                $('.row-input-comment[post-id='+post_id['id']+']').hide();
+            },
+        });
+        return false;
+});
+JS;
+
+$this->registerJs($js);
+?>

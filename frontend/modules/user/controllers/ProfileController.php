@@ -22,41 +22,14 @@ class ProfileController extends Controller
      */
     public function actionView($nickname)
     {
-        $modelProfileImg = new ProfileImgForm();
         $modelComment = new CommentForm(Yii::$app->user->identity->getNickname());
         $user = $this->findUser($nickname);
         return $this->render('index', [
-            'modelProfileImg' => $modelProfileImg,
             'currentUser' => Yii::$app->user->identity,
             'user' => $user,
             'posts' => $user->posts,
             'modelComment' => $modelComment,
         ]);
-    }
-
-    public function actionUploadProfileImg()
-    {
-        Yii::$app->response->format = Response::FORMAT_JSON;
-
-        $currentUser = Yii::$app->user->identity;
-
-        $modelProfileImg = new ProfileImgForm();
-        $modelProfileImg->profileImg = UploadedFile::getInstance($modelProfileImg, 'profileImg');
-
-        if ($modelProfileImg->validate()) {
-
-            if ($path = Yii::$app->ImgService->saveImg($modelProfileImg, 'resize')) {
-
-                $currentUser->deleteProfileImg();
-                $currentUser->updateProfileImg($path);
-
-                return [
-                    'success' => true,
-                    'ProfileImgUri' => $path,
-                ];
-            }
-        }
-        return ['success' => false, 'errors' => $modelProfileImg->getErrors()];
     }
 
     public function actionSubscribe()

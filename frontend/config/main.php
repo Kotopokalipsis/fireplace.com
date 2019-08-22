@@ -54,6 +54,7 @@ return [
                 '/index' => '/site/index',
                 '/signup' => '/user/default/signup',
                 '/login' => '/user/default/login',
+                '/settings' => '/user/default/settings',
                 'profile/<nickname:\w+>' => 'user/profile/view',
                 'post/<id:\d+>' => 'post/default/view',
                 'post/new' => 'post/default/new-post',

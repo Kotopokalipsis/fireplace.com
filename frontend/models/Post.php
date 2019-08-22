@@ -3,6 +3,7 @@
 namespace frontend\models;
 
 use Yii;
+use yii\db\ActiveQuery;
 use yii\db\ActiveRecord;
 use yii\behaviors\TimestampBehavior;
 use frontend\models\Comments;
@@ -110,5 +111,19 @@ class Post extends \yii\db\ActiveRecord
     public function getUser()
     {
         return $this->hasOne(User::classname(), ['id' => 'user_id']);
+    }
+
+    public function deletePost()
+    {
+        if(Yii::$app->user->identity->getId() == $this->user_id){
+            if($this->comments != null){
+                foreach ($comments = $this->comments as $comment){
+                    $comment->deleteComment();
+                }
+            };
+            $this->delete();
+            return true;
+        }
+        return false;
     }
 }

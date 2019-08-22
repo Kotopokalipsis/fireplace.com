@@ -61,6 +61,25 @@ class DefaultController extends Controller
         ]);
     }
 
+    public function actionDeletePost()
+    {
+        if(Yii::$app->user->isGuest){
+            return $this->redirect(['/user/default/login']);
+        }
+        Yii::$app->response->format = Response::FORMAT_JSON;
+        if($post = $this->findPost(Yii::$app->request->post())){
+            if($post->deletePost()){
+                return [
+                    'success' => true,
+                ];
+            };
+        };
+        return [
+            'success' => false,
+            'res' => Yii::$app->request->post(),
+        ];
+    }
+
     /**
      * Find single post
      * @param string $id of post
